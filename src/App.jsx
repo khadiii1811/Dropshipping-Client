@@ -1,35 +1,44 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate, useParams } from 'react-router-dom';
+import SellerRoutes from './routes/SellerRoutes';
+import SupplierRoutes from './routes/SupplierRoutes';
+import CustomerRoutes from './routes/CustomerRoutes';
+import AdminRoutes from './routes/AdminRoutes';
+import Homepage from './pages/Homepage';
+import './App.css';
+
+// Component to handle homepage with userType parameter
+const HomepageWithUserType = () => {
+  const { userType } = useParams();
+  return <Homepage userType={userType} />;
+};
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <Router>
+      <div className="App">
+        <Routes>
+          {/* Default route - redirect to seller homepage */}
+          <Route path="/" element={<Navigate to="/seller" replace />} />
+          
+          {/* Direct homepage routes with userType */}
+          <Route path="/homepage/:userType" element={<HomepageWithUserType />} />
+          
+          {/* Seller routes */}
+          <Route path="/seller/*" element={<SellerRoutes />} />
+          
+          {/* Supplier routes */}
+          <Route path="/supplier/*" element={<SupplierRoutes />} />
+          
+          {/* Customer routes */}
+          <Route path="/customer/*" element={<CustomerRoutes />} />
+          
+          {/* Admin routes */}
+          <Route path="/admin/*" element={<AdminRoutes />} />
+        </Routes>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    </Router>
+  );
 }
 
-export default App
+export default App;
